@@ -24,13 +24,42 @@ class ParentView: UIView {
         tf.textAlignment = .center
         tf.font = UIFont.boldSystemFont(ofSize: 22)
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "ФИО"
+        tf.placeholder = "Имя"
         tf.layer.cornerRadius = 12
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.darkGray.cgColor
         tf.accessibilityIdentifier = "name"
         return tf
     }()
+    
+    let secondNameTextField: UITextField = {
+        let tf = UITextField()
+        tf.textColor = .black
+        tf.textAlignment = .center
+        tf.font = UIFont.boldSystemFont(ofSize: 22)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.placeholder = "Фамилия"
+        tf.layer.cornerRadius = 12
+        tf.layer.borderWidth = 1
+        tf.layer.borderColor = UIColor.darkGray.cgColor
+        tf.accessibilityIdentifier = "name"
+        return tf
+    }()
+    
+    let parentNameTextField: UITextField = {
+        let tf = UITextField()
+        tf.textColor = .black
+        tf.textAlignment = .center
+        tf.font = UIFont.boldSystemFont(ofSize: 22)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.placeholder = "Отчество"
+        tf.layer.cornerRadius = 12
+        tf.layer.borderWidth = 1
+        tf.layer.borderColor = UIColor.darkGray.cgColor
+        tf.accessibilityIdentifier = "name"
+        return tf
+    }()
+
     
     let ageTextField: UITextField = {
         let tf = UITextField()
@@ -99,6 +128,8 @@ class ParentView: UIView {
         backgroundColor = .white
         addSubview(titleLabel)
         addSubview(nameTextField)
+        addSubview(secondNameTextField)
+        addSubview(parentNameTextField)
         addSubview(ageTextField)
         addSubview(nameLabel)
         addSubview(addButton)
@@ -110,32 +141,42 @@ class ParentView: UIView {
     func createConstraints() {
         NSLayoutConstraint.activate([
             
-            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 25),
         
-            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             nameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             nameTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             nameTextField.heightAnchor.constraint(equalToConstant: 48),
-            nameTextField.bottomAnchor.constraint(equalTo: ageTextField.topAnchor, constant: -16),
+            nameTextField.bottomAnchor.constraint(equalTo: secondNameTextField.topAnchor, constant: -10),
             
+            secondNameTextField.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor),
+            secondNameTextField.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor),
+            secondNameTextField.heightAnchor.constraint(equalTo: nameTextField.heightAnchor),
+            secondNameTextField.bottomAnchor.constraint(equalTo: parentNameTextField.topAnchor, constant: -10),
+            
+            parentNameTextField.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor),
+            parentNameTextField.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor),
+            parentNameTextField.heightAnchor.constraint(equalTo: nameTextField.heightAnchor),
+            parentNameTextField.bottomAnchor.constraint(equalTo: ageTextField.topAnchor, constant: -10),
+
             ageTextField.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor),
             ageTextField.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor),
             ageTextField.heightAnchor.constraint(equalTo: nameTextField.heightAnchor),
-            ageTextField.bottomAnchor.constraint(equalTo: nameLabel.topAnchor, constant: -16),
+            ageTextField.bottomAnchor.constraint(equalTo: nameLabel.topAnchor, constant: -10),
             
             nameLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor),
             nameLabel.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor),
             nameLabel.heightAnchor.constraint(equalToConstant: 25),
-            nameLabel.bottomAnchor.constraint(equalTo: addButton.topAnchor, constant: -16),
+            nameLabel.bottomAnchor.constraint(equalTo: addButton.topAnchor, constant: -10),
 
             addButton.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             addButton.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor),
             addButton.heightAnchor.constraint(equalToConstant: 60),
             
-            childrenTableView.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 16),
+            childrenTableView.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 5),
             childrenTableView.leadingAnchor.constraint(equalTo: leadingAnchor),
             childrenTableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             childrenTableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
