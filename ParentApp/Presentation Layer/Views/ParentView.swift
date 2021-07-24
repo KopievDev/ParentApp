@@ -25,7 +25,7 @@ class ParentView: UIView {
         tf.font = UIFont.boldSystemFont(ofSize: 22)
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "ФИО"
-        tf.layer.cornerRadius = 10
+        tf.layer.cornerRadius = 12
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.darkGray.cgColor
         tf.accessibilityIdentifier = "name"
@@ -39,7 +39,7 @@ class ParentView: UIView {
         tf.font = UIFont.boldSystemFont(ofSize: 22)
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "Возраст"
-        tf.layer.cornerRadius = 10
+        tf.layer.cornerRadius = 12
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.darkGray.cgColor
         tf.accessibilityIdentifier = "age"
@@ -58,12 +58,12 @@ class ParentView: UIView {
     
     let addButton: UIButton = {
         let button = UIButton()
-        button.setTitle("+", for: .normal)
-        button.setTitleColor(.brown, for: .highlighted)
+        button.setTitle("Добавить ребенка", for: .normal)
+        button.setTitleColor(.lightGray, for: .highlighted)
         button.backgroundColor = UIColor(red: 0.988, green: 0.79, blue: 0.79, alpha: 1)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 24
+        button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.addTarget(self, action: #selector(animateView(_:)), for: .touchUpInside)
@@ -77,6 +77,8 @@ class ParentView: UIView {
         tv.separatorStyle = .none
         return tv
     }()
+    
+    var keyboardDismissTapGesture: UIGestureRecognizer?
     
     // MARK: - Lifecycle
     override init(frame: CGRect) {
@@ -100,6 +102,7 @@ class ParentView: UIView {
         addSubview(addButton)
         addSubview(childrenTableView)
         createConstraints()
+        registerForKeyboardNotification()
     }
     
     func createConstraints() {
@@ -127,8 +130,8 @@ class ParentView: UIView {
             nameLabel.bottomAnchor.constraint(equalTo: addButton.topAnchor, constant: -16),
 
             addButton.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            addButton.heightAnchor.constraint(equalToConstant: 48),
-            addButton.widthAnchor.constraint(equalTo: addButton.heightAnchor),
+            addButton.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor),
+            addButton.heightAnchor.constraint(equalToConstant: 60),
             
             childrenTableView.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 16),
             childrenTableView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -147,6 +150,36 @@ class ParentView: UIView {
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
             viewToAnimate.transform = .identity
             
+        }
+    }
+    
+    //  Обработка появления клавиатуры
+       private func registerForKeyboardNotification() {
+           NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+           NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+       }
+       
+    // MARK: - Selectors
+    @objc private func keyboardWillShow(_ notification: Notification) {
+
+        if keyboardDismissTapGesture == nil {
+            keyboardDismissTapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(sender:)))
+            keyboardDismissTapGesture?.cancelsTouchesInView = false
+            addGestureRecognizer(keyboardDismissTapGesture!)
+        }
+        
+    }
+    @objc func dismissKeyboard(sender: UITapGestureRecognizer) {
+        endEditing(true)
+    }
+    
+    @objc private func keyboardWillHide() {
+        if bounds.origin.y != 0 {
+            bounds.origin.y = 0
+            if keyboardDismissTapGesture != nil {
+                removeGestureRecognizer(keyboardDismissTapGesture!)
+                keyboardDismissTapGesture = nil
+            }
         }
     }
 }

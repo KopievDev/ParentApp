@@ -13,7 +13,7 @@ class ChildrenCell: UITableViewCell {
     private let view: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
-        view.backgroundColor = .systemPink
+        view.backgroundColor = .systemTeal
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -37,7 +37,7 @@ class ChildrenCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderColor = UIColor.white.cgColor
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -71,8 +71,8 @@ class ChildrenCell: UITableViewCell {
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
             view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
-            view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
-            view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
+            view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             view.heightAnchor.constraint(greaterThanOrEqualToConstant: 60),
             
             nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),

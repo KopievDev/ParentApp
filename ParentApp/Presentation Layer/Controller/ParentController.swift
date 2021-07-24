@@ -12,7 +12,6 @@ class ParentController: UIViewController {
     // MARK: - Properties
     lazy var parentView = ParentView(frame: self.view.frame)
     var childrens = [Person]()
-    var parentPerson: Person?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -44,7 +43,7 @@ class ParentController: UIViewController {
             tf.placeholder = "Возраст"
             tf.keyboardType = .decimalPad
         }
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+        alert.addAction(UIAlertAction(title: "Добавить", style: .default, handler: { action in
             
             guard let name =  alert.textFields?[0].text,
                   let age = Int(alert.textFields?[1].text ?? "0") else { return }
@@ -76,6 +75,7 @@ class ParentController: UIViewController {
     }
 }
 
+// MARK: - Extension TableView DataSource
 extension ParentController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return childrens.count
@@ -91,7 +91,7 @@ extension ParentController: UITableViewDataSource {
     
     
 }
-
+// MARK: - Extension TableView Delegate
 extension ParentController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -99,7 +99,7 @@ extension ParentController: UITableViewDelegate {
     }
 
 }
-
+// MARK: - Extension ChildrenCellDelegate
 extension ParentController: ChildrenCellDelegate {
     func didTapButton(on index: Int) {
         childrens.remove(at: index)
@@ -108,7 +108,7 @@ extension ParentController: ChildrenCellDelegate {
         checkShowAddButton()
     }
 }
-
+// MARK: - Extension UITextFieldDelegate
 extension ParentController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard var name = parentView.nameTextField.text,
