@@ -68,6 +68,12 @@ class ParentController: UIViewController {
 
         }
     }
+    
+    func removeChildren(at index: Int) {
+        childrens.remove(at: index)
+        parentView.childrenTableView.reloadData()
+        checkShowAddButton()
+    }
     // MARK: - Selectors
     @objc func addChildren() {
         showAlert()
@@ -97,15 +103,22 @@ extension ParentController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let contextItem = UIContextualAction(style: .destructive, title: "Удалить") {  (contextualAction, view, boolValue) in
+            self.removeChildren(at: indexPath.row)
+            
+        }
+        let swipeActions = UISwipeActionsConfiguration(actions: [contextItem])
+        
+        return swipeActions
+    }
+    
 }
 // MARK: - Extension ChildrenCellDelegate
 extension ParentController: ChildrenCellDelegate {
     func didTapButton(on index: Int) {
-        childrens.remove(at: index)
-        parentView.childrenTableView.reloadData()
-        print(index)
-        checkShowAddButton()
+        removeChildren(at: index)
     }
 }
 // MARK: - Extension UITextFieldDelegate

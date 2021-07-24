@@ -31,13 +31,11 @@ class ChildrenCell: UITableViewCell {
     private let removeButton: UIButton = {
         let button = UIButton()
         button.setTitle("Удалить", for: .normal)
-        button.setTitleColor(.brown, for: .highlighted)
+        button.setTitleColor(.systemPink, for: .highlighted)
         button.backgroundColor = UIColor(red: 0.988, green: 0.79, blue: 0.79, alpha: 1)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .heavy)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 16
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.white.cgColor
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -64,6 +62,10 @@ class ChildrenCell: UITableViewCell {
         view.addSubview(removeButton)
         createConstraints()
         removeButton.addTarget(self, action: #selector(didTap(button:)), for: .touchUpInside)
+        removeButton.addTarget(self, action: #selector(animateViewIn(_:)), for: .touchDown)
+        removeButton.addTarget(self, action: #selector(animateViewOut(_:)), for: .touchUpOutside)
+        removeButton.addTarget(self, action: #selector(animateViewOut(_:)), for: .touchCancel)
+
 
     }
     
@@ -93,18 +95,22 @@ class ChildrenCell: UITableViewCell {
         myIndex = index
     }
     
-    private func animateView(_ viewToAnimate: UIView) {
+    @objc private func animateViewIn(_ viewToAnimate: UIView) {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 0.5, options: .curveEaseIn) {
             viewToAnimate.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
+    }
+    
+    @objc private func animateViewOut(_ viewToAnimate: UIView) {
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
             viewToAnimate.transform = .identity
             
         }
     }
     
+    // MARK: - Selectors
     @objc private func didTap(button: UIButton) {
-        animateView(button)
+        animateViewOut(button)
         guard let index = myIndex else {
             return
         }

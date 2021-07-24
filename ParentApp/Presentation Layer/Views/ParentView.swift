@@ -39,6 +39,7 @@ class ParentView: UIView {
         tf.font = UIFont.boldSystemFont(ofSize: 22)
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "Возраст"
+        tf.keyboardType = .numberPad
         tf.layer.cornerRadius = 12
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.darkGray.cgColor
@@ -64,9 +65,10 @@ class ParentView: UIView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 16
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.addTarget(self, action: #selector(animateView(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(animateViewIn(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(animateViewOut(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(animateViewOut(_:)), for: .touchUpOutside)
+
         return button
     }()
 
@@ -142,24 +144,28 @@ class ParentView: UIView {
         
     }
     
-    // MARK: - Selectors
-    @objc private func animateView(_ viewToAnimate: UIView) {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 0.5, options: .curveEaseIn) {
-            viewToAnimate.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        }
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
-            viewToAnimate.transform = .identity
-            
-        }
-    }
-    
     //  Обработка появления клавиатуры
        private func registerForKeyboardNotification() {
            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
        }
-       
+
+    
     // MARK: - Selectors
+    // Animations
+    @objc private func animateViewIn(_ viewToAnimate: UIView) {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 0.5, options: .curveEaseIn) {
+            viewToAnimate.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }
+    }
+    
+    @objc private func animateViewOut(_ viewToAnimate: UIView) {
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1, options: .curveEaseIn) {
+            viewToAnimate.transform = .identity
+            
+        }
+    }
+    // Keyboard
     @objc private func keyboardWillShow(_ notification: Notification) {
 
         if keyboardDismissTapGesture == nil {
@@ -169,6 +175,7 @@ class ParentView: UIView {
         }
         
     }
+    
     @objc func dismissKeyboard(sender: UITapGestureRecognizer) {
         endEditing(true)
     }
